@@ -45,9 +45,9 @@ Segundo Peter e Andrew Bruce, a Ciência de Dados é uma fusão de múltiplas di
 - Embora a profissão de cientista de dados seja relativamente recente, o termo ciência de dados apareceu pela primeira vez na década de 1960, como um nome alternativo para estatísticas.
 
 Na figura abaixo, está sendo apresentado John Tukey, ilustre estatístico americano que formulou ideias, consideradas fundamentos da ciência de dados.
-<div align="center">
-  ![John Tukey](images/john_tukey.png)
-</div>
+
+![John Tukey](images/john_tukey.png)
+
 ### 2.2 Análise Exploratória de Dados
 A análise exploratória de dados (Exploratory Data Analysis - EDA) inclui métodos para explorar conjuntos de dados, a fim de resumir suas principais características e identificar quaisquer problemas nos dados. Utilizando métodos estatísticos e visualizações, você pode obter informações sobre um conjunto de dados para determinar sua prontidão para análise e informar quais técnicas aplicar para a preparação dos dados. (Fonte: Exploratory data analysis on Databricks: Tools and techniques. 2023)
 
