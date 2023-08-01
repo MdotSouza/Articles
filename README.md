@@ -1,2 +1,2 @@
 # Articles
-Repositório de artigos e estudos de casp
+Repositório de artigos e estudos de caso
