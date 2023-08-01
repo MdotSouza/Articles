@@ -1,4 +1,4 @@
-![CAPA - PYTHON](images\capa.png)
+![CAPA - PYTHON](images/capa.png)
 
 # Estudo de Caso: Análise Exploratória de Dados e Comparação de Modelos de Aprendizado de Máquina
 
@@ -46,7 +46,7 @@ Segundo Peter e Andrew Bruce, a Ciência de Dados é uma fusão de múltiplas di
 
 Na figura abaixo, está sendo apresentado John Tukey, ilustre estatístico americano que formulou ideias, consideradas fundamentos da ciência de dados.
 
-![John Tukey](images\john_tukey.png)
+![John Tukey](images/john_tukey.png)
 
 ### 2.2 Análise Exploratória de Dados
 A análise exploratória de dados (Exploratory Data Analysis - EDA) inclui métodos para explorar conjuntos de dados, a fim de resumir suas principais características e identificar quaisquer problemas nos dados. Utilizando métodos estatísticos e visualizações, você pode obter informações sobre um conjunto de dados para determinar sua prontidão para análise e informar quais técnicas aplicar para a preparação dos dados. (Fonte: Exploratory data analysis on Databricks: Tools and techniques. 2023)
@@ -81,18 +81,18 @@ Existem várias métricas para verificação da qualidade de predição e desemp
 
 - Escore F1 (F1-Score): métrica calculada a partir da média harmônica entre a precisão e o recall, fornecendo uma medida entre a capacidade do modelo de identificar corretamente exemplos positivos e evitar falsos positivos;
 
-![Métricas](images\metricas.png)
+![Métricas](images/metricas.png)
 
 - Matriz de confusão (confusion matrix): é uma tabela onde se visualiza a contagem de previsões corretas e incorretas feitas pelo modelo, permitindo a análise de erros da classificação.
 
-![Matriz](images\matriz.png)
+![Matriz](images/matriz.png)
 
 Vale ressaltar que as métricas foram apresentadas de forma resumida. Fica como sugestão a pesquisa mais profunda da definição e aplicação de cada uma delas.
 
 ## 3. Contextualização: Entendendo o Problema
 Apesar dos esforços contínuos dos bancos para atrair e reter clientes, o setor bancário enfrenta um desafio constante, apresentado na forma de perda de clientes, levando a prejuízos financeiros.
 
-![Churn](images\churn.png)
+![Churn](images/churn.png)
 
 É vantajoso para os bancos saber o que leva um cliente à decisão de sair da empresa ou deixar de consumir determinado serviço bancário. Logo, este pequeno projeto tem como variável alvo (target) a taxa de rotatividade  (churn rate) de clientes de um banco, a partir de um conjunto de dados apresentando as características destes clientes (features), disponibilizados na plataforma Kaggle.
 
