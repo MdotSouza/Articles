@@ -100,3 +100,78 @@ Após a análise, serão realizados treinos de modelos de aprendizado de máquin
 
 No final, serão visualizados os resultados da modelagem, a partir da verificação de métricas. Além disso, serão apresentadas possíveis melhorias, através da sugestão de aplicações de metodologias mais avançadas, que não fazem parte deste estudo.
 
+## 4. Análise Exploratória
+Acendam as luzes, pois o momento é chegado! A partir de agora serão apresentados trechos de código para exploração e tratamento de dados.
+
+Durante o desenvolvimento, as principais bibliotecas utilizadas foram Pandas e NumPy para manipulação de dados, Scikt-Learn para utilização de modelos e métricas, e também os pacotes de visualização Matplotlib e Seaborn.
+
+### 4.1 Preparação do Ambiente
+- Importação de Bibliotecas
+
+```py
+#@title Importação de Bibliotecas
+
+import pandas as pd #Manipulação de conjuntos de dados
+import numpy as np #Manipulações numéricas
+import matplotlib.pyplot as plt #Análises gráficas
+import seaborn as sns #Análises gráficas
+import io #Manipulação de entradas e saídas
+import gdown #Acesso a arquivos no Google Drive
+
+from matplotlib.widgets import TextBox #Visualização de textos
+from sklearn.preprocessing import StandardScaler #Normalização dos dados
+from sklearn.neighbors import KNeighborsClassifier #Modelo KNN
+from sklearn.ensemble import RandomForestClassifier #Modelo Floresta Aleatória
+from sklearn.model_selection import train_test_split #Divisões dos conjuntos treino/teste
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score #Extração de indicadores
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay #Extração de matrizes
+```
+
+- Importação do Conjunto de Dados
+
+```py
+# @title Importação do Conjunto de Dados
+
+FILE = "17q-pzYIT--eNojoZDLDQRWrt6ADjiIH-"
+URL = f"https://drive.google.com/uc?id={FILE}"
+OUTPUT = "Churn_Modelling.csv"
+gdown.download(url=URL,output=OUTPUT)
+df = pd.read_csv(OUTPUT)
+```
+
+### 4.2 Visualização do Conjunto de Dados
+- Verificação das Informações do Conjunto
+
+```py
+# @title Verificação das Informações do Conjunto de Dados
+
+buffer = io.StringIO()
+df.info(buf=buffer)
+s = buffer.getvalue()
+
+plt.figure(figsize=(5,5))
+ax = plt.subplot()
+texto=f'''
+Churn Modelling
+Registros: {df.shape[0]}
+Colunas: {df.shape[1]}
+'''
+textBox = TextBox(ax,label=texto,initial=s)
+
+plt.show()
+```
+
+![Info](images\info.png)
+
+Observação: a utilização do método info para DataFrame é de extrema importância. A partir dele é verificada a quantidade de registros em cada coluna e os respectivos tipos de dados. Através destas verificações, podemos prever necessidade de manipulações e tratamentos de variáveis.
+
+- Visualização dos Dados
+
+```py
+# @title Visualização do Conjunto de Dados (a partir de agora chamado de DataFrame)
+df.head()
+```
+
+![Head](images\head.png)
+
+Observação: assim como o info, a utilização do método head é quase obrigatória. Não podemos explorar dados sem visualização. Apresenta, por padrão, os cinco primeiros registros do DataFrame.
