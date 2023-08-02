@@ -12,14 +12,13 @@ Agora, o mundo da tecnologia reconhece a importância do profissional em Ciênci
 Mas, e você… Já viu Ciência de Dados na prática? O que um Cientista de Dados produz? Caso não tenha visto, vamos lá!
 
 Teremos o seguinte trajeto:  
-
-- Introdução (o que será abordado?)
-- Apresentação de Conceitos Iniciais (qual a base teórica contida?)
-- Contextualização: Entendendo o Problema (qual o enredo da história?)
-- Análise Exploratória (mão na massa vol.1!)
-- Aplicação dos Modelos (mão na massa vol. 2!!)
-- Conclusão (como podemos aproveitar e aperfeiçoar o estudo?)
-- Referências (não chegamos até aqui sozinhos…)
+1. Introdução (o que será abordado?)
+2. Apresentação de Conceitos Iniciais (qual a base teórica contida?)
+3. Contextualização: Entendendo o Problema (qual o enredo da história?)
+4. Análise Exploratória (mão na massa vol.1!)
+5. Aplicação dos Modelos (mão na massa vol. 2!!)
+6. Conclusão (como podemos aproveitar e aperfeiçoar o estudo?)
+7. Referências (não chegamos até aqui sozinhos…)
 
 ## 1. Introdução
 Devido à forte competitividade de mercado e o aumento significativo da quantidade de dados gerados, as organizações precisam extrair deles informações valiosas. Estas são extremamente necessárias para tomadas de decisões estratégicas cada vez mais assertivas.
@@ -278,7 +277,7 @@ print(f"Gender: {set(df['Gender'])}")
 
 ![Categoricas2](images/categoricas2.png)
 
-Observação: uma boa prática em análise exploratória e aprendizado de máquina, transformar as codificar as variáveis categóricas. O modelo performar melhor trabalhando com valores numéricos inteiros do que textos.
+Observação: uma boa prática em análise exploratória e aprendizado de máquina, transformar e codificar as variáveis categóricas. O modelo performa melhor trabalhando com valores numéricos inteiros do que textos.
 
 - Apresentação da Matriz de Correlação
 
@@ -295,4 +294,171 @@ plt.show()
 
 Observação: a matriz de correlação apresenta uma maneira fácil para visualizar a relação entre variáveis. Os coeficientes de correlação, calculados através de outro método para DataFrame, o corr, são dispostos numa matriz. Através de uma breve análise, por exemplo, podemos concluir que a variável que possui a maior correlação (mesmo que não muito alta, 0.29) com o nosso target é a Age.
 
-Lembrando que as análises exploratória de dados foram apresentadas de forma resumida. Fica como sugestão a visualização de outros textos, indicados nas referências logo no final do artigo, para aprofundamento do assunto.
+Lembrando que as análises exploratórias de dados foram apresentadas de forma resumida. Fica como sugestão a visualização de outros textos, indicados nas referências logo no final do artigo, para aprofundamento do assunto.
+
+# 5. Aplicação dos Modelos
+Dando prosseguimento ao nosso estudo, vamos aplicar os modelos de aprendizado de máquina. Os modelos escolhidos foram KNN e Floresta Aleatória, ambos podem ser aplicados à problemas de classificação.
+
+É válido ressaltar que não serão detalhados os algoritmos e o embasamento teórico que sustentam os modelos aplicados. Porém, para aprofundamento no assunto, também estão indicadas referências para estudo KNN e Floresta Aleatória.
+
+### 5.1 Pré-processamento
+
+- Divisão dos Conjuntos
+
+```py
+# @title Divisão dos Conjuntos de Treino e Teste
+X = df.drop(columns='Exited')
+y = df['Exited']
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42,stratify=y)
+```
+
+Observação: definição dos conjunto de features (X) e de target (y). Além da divisão de conjuntos para treino do modelo (X_train, y_train) e para testes (X_test, y_test). Como definido pelo parâmetro test_size, 20% dos registros foram utilizados para testes e 80% para treino.
+
+- Normalização dos Dados
+
+```py
+# @title Padronização dos Dados
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+```
+
+Observação: a normalização é uma prática habitual. O objetivo é mudar os valores das colunas numéricas no conjunto de dados para usar uma escala comum, sem distorcer as diferenças nos intervalos de valores, nem perder informações.
+
+### 5.2 Implementação dos Modelos
+
+- Instância dos Modelos
+
+```py
+# @title Instanciando os Modelos
+knn = KNeighborsClassifier(n_neighbors = 5)
+rf = RandomForestClassifier(random_state = 42)
+```
+
+- Função para Executar Modelos
+
+```py
+# @title Função para Aplicação de Modelo
+def predicao(modelo, conjuntos):
+    X_train, X_test, y_train, y_test = conjuntos
+
+    #Fitting de Dados e Predição
+    modelo.fit(X_train, y_train)
+    y_pred = modelo.predict(X_test)
+
+    #Calcula as métricas
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    cm = confusion_matrix(y_test, y_pred)
+
+    return acc, prec, recall, f1, cm
+```
+
+Observação: utilização de funções auxiliam muito durante o desenvolvimento. Deste modo, por exemplo, a entrada de mais tipos de modelos de aprendizado no código está facilitada.
+
+- Aplicação do Modelo
+
+```py
+# @title Aplicação de Modelo Utilizando Técnicas de Programação Funcional
+%%time
+
+MODELOS = { "KNN": knn, "Floresta Aleatória": rf}
+INDICADORES = ["accuracy", "precision", "recall", "f1-score"]
+
+#Variáveis para armazenar os resultados
+dfResultados = pd.DataFrame(index=INDICADORES,columns=MODELOS.keys())
+listMatrix = []
+
+#Execução da rotina de predição
+for descricao, modelo in MODELOS.items():
+  *dfResultados[descricao] , matrix = predicao(modelo, (X_train, X_test, y_train, y_test))
+  listMatrix.append(matrix) 
+```
+
+### 5.3 Apresentação das Métricas
+
+- Indicadores
+
+```py
+# @title Indicadores
+dfResultados.T.style.highlight_max(color='black')
+```
+
+![Indicadores](images/indicadores.png)
+
+- Matrizes de Confusão
+
+```py
+# @title Matrizes de Confusão
+for matrix, descricao in zip(listMatrix , MODELOS.keys()):
+    disp = ConfusionMatrixDisplay(matrix)
+    disp.plot()
+    plt.title(f"Modelo - {descricao}")
+    plt.show()
+```
+
+![Matriz de Confusão](images/matriz1.png)
+
+![Matriz de Confusão](images/matriz2.png)
+
+Observação: pode-se afirmar que o modelo de Floresta Aleatória apresentou um desempenho geral melhor do que o KNN em todos os indicadores. Sendo assim, ele seria o escolhido para este exemplo de aplicação de problema de classificação.
+
+# 6. Conclusão
+Através deste artigo, foi possível verificar um pouco da complexidade do trabalho executado pelo cientista de dados. Mesmo não se tratando de um estudo aprofundado, foram apresentadas técnicas relevantes para análise e exploração dos dados.
+
+Verificamos que, para esse conjunto de dados específico e com base nessas métricas (existem várias, como mencionado anteriormente), o modelo de Floresta Aleatória seria a escolha recomendada. No entanto, é importante levar em consideração outros fatores, como a interpretação do problema, a complexidade dos modelos, o tempo de execução e outros requisitos específicos do projeto, antes de tomar uma decisão final.
+
+Possíveis melhorias poderiam ser aplicadas nestes modelos, pois com o desempenho apresentado no estudo, mesmo o modelo que obteve uma performance melhor, não seria colocado em produção numa organização.
+
+Outras técnicas poderiam ser utilizadas, como por exemplo:
+1. Balanceamento de target, através de técnicas de Undersampling, Oversampling e o SMOTE;
+2. Otimização de hiperparâmetro, com utilização de GridSearch e RandomSearch;
+3. Validação cruzada, como por exemplo K-Fold, para compreender a robustez do modelo;
+4. Gerenciamento de fluxo de trabalho, com a plataforma MLflow ou framework Luigi;
+5. Feature engineering, que é a criação de novas features partir das disponíveis, envolvendo vários métodos de transformação de dados;
+6. Utilização de outros modelos, como Boosting, SVM, Regressão Logístca...
+
+Finalmente, chegamos ao fim deste estudo de caso. Foi ressaltada a importância do trabalho do cientista de dados na aplicação de EDA e Machine Learning. O uso dessas técnicas possibilita a descoberta de percepções valiosas, a construção de modelos preditivos mais precisos e a tomada de decisões fundamentadas com base nos dados.
+
+# 7. Referências
+[1] https://www.oracle.com/br/what-is-data-science/
+
+[2] https://www.ibm.com/br-pt/topics/data-science
+
+[3] https://aws.amazon.com/pt/what-is/data-science/
+
+[4] https://www.kaggle.com/code/kdsharma/banking-churn-analysis-modeling
+
+[5] https://www.analyticsvidhya.com/blog/2022/09/bank-customer-churn-prediction-using-machine-learning
+
+[6] https://mitsloan.mit.edu/ideas-made-to-matter/machine-learning-explained
+
+[7] https://www.analyticsvidhya.com/blog/2021/07/metrics-to-evaluate-your-classification-model-to-take-the-right-decisions/
+
+[8] https://mathshistory.st-andrews.ac.uk/Biographies/Tukey/
+
+[9] https://docs.databricks.com/exploratory-data-analysis/index.html
+
+[10] https://research.google.com/colaboratory/intl/pt-BR/faq.html
+
+[11] https://www.ibm.com/topics/exploratory-data-analysis
+
+[12] https://www.oreilly.com/library/view/practical-statistics-for/9781492072935/
+
+[13] https://learn.microsoft.com/pt-br/azure/machine-learning/?view=azureml-api-2
+
+[14] https://pandas.pydata.org/
+
+[15] https://scikit-learn.org/stable/
+
+[16] https://numpy.org/
+
+[17] https://matplotlib.org/
+
+[18] https://seaborn.pydata.org/
+
+[19] https://www.ibm.com/topics/knn
+
+[20] https://www.ibm.com/topics/random-forest
