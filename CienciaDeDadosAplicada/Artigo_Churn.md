@@ -161,7 +161,7 @@ textBox = TextBox(ax,label=texto,initial=s)
 plt.show()
 ```
 
-![Info](images\info.png)
+![Info](images/info.png)
 
 Observação: a utilização do método info para DataFrame é de extrema importância. A partir dele é verificada a quantidade de registros em cada coluna e os respectivos tipos de dados. Através destas verificações, podemos prever necessidade de manipulações e tratamentos de variáveis.
 
@@ -172,6 +172,127 @@ Observação: a utilização do método info para DataFrame é de extrema import
 df.head()
 ```
 
-![Head](images\head.png)
+![Head](images/head.png)
 
 Observação: assim como o info, a utilização do método head é quase obrigatória. Não podemos explorar dados sem visualização. Apresenta, por padrão, os cinco primeiros registros do DataFrame.
+
+### 4.3 Aplicação de análises uni-variadas não gráficas
+- Verificação da Quantidade de Dados Nulos ou Duplicados
+
+```py
+nulos = df.isnull().sum()
+duplicados = df[df.duplicated()].sum()
+display(pd.DataFrame([nulos, duplicados])
+        .T
+        .rename(columns={0:"Nulos",1:"Duplicados"})
+       )
+```
+
+![Nulos](images/nulos.png)
+
+Observação: este conjunto de dados, especificamente, não apresenta ausência de valores ou repetição deles (na maioria dos casos isso não ocorre). Caso apresentasse, seria necessário aplicar alguma técnica de tratamento, ou até mesmo o descarte de determinadas colunas.
+
+- Verificação de Balanceamento da Variável Alvo (TARGET)
+
+```py
+# @title Verificação de Balanceamento da Variável Alvo (TARGET)
+
+count = df[['Exited']].value_counts().values
+
+fig = plt.figure(figsize=(10,4))
+fig.suptitle('TARGET: Coluna Exited')
+
+plt.subplot(1,2,1)
+plt.bar(["Não","Sim"],count,color=['silver','gray'], label=count, edgecolor = "black") 
+plt.legend()
+
+plt.subplot(1,2,2)
+plt.pie(count, colors=['silver','gray'], labels=["Não","Sim"],autopct="%1.1f%%", shadow=True,wedgeprops = {'linewidth': 10})
+
+plt.show()
+```
+
+![Target](images/target.png)
+
+Observações: os valores da variável alvo devem ser analisados com uma certa importância. Primeiramente, como se trata de um problema de classificação, podemos concluir que existem duas classes, a partir da quantidade de resultados possíves.
+
+Classe 1 - Valor 0 ou "NÃO": representa clientes que se mantiveram no banco.
+
+Classe 2 - Valor 1 ou "SIM": representa clientes que saíram.
+
+Os gráficos confirmam um desbalanceamento do target, pois 80% das ocorrências foram da classe 1 e 20% da classe 2. Esta característica pode influenciar no resultado dos modelos (ou não).
+
+- Resumo das Variáveis Numéricas
+
+```py
+# @title Resumo das Variáveis Numéricas
+display(df.describe(include=[np.number]))
+```
+
+![Describe1](images/describe1.png)
+
+Observação: outro método muito poderoso é o describe. Para as variáveis numéricas, são disponibilizadas informações de medidas de posição, como média, moda e quartis.
+
+- Resumo das Variáveis não Numéricas
+
+```py
+# @title Resumo das Variáveis não Numéricas
+display(df.describe(include=[object]).T)
+```
+
+![Describe2](images/describe2.png)
+
+Observação: o describe também pode ser aplicado à variáveis não numéricas, trazendo outros tipos de informações.
+
+### 4.4 Aplicação de análises multivariadas gráficas
+Antes da apresentação das análises, faz-se necessários realizar transformações nos dados, para melhor compreensão.
+
+- Limpeza do Conjunto de Dados
+
+```py
+# @title Retirada das Colunas sem Utilização
+df = df.drop(columns=['RowNumber','CustomerId','Surname']) 
+```
+
+- Transformação das Colunas Categóricas
+
+```py
+# @title Verificação dos Valores das Colunas Categóricas
+print(f"Geopraphy: {set(df['Geography'])}")
+print(f"Gender: {set(df['Gender'])}")
+```
+
+![Categoricas1](images/categoricas1.png)
+
+```py
+# @title Codificação Ordinal das Colunas Categóricas
+dictGeography = {"Germany" : 0, "France" : 1, "Spain" : 2}
+df["Geography"] = df["Geography"].map(dictGeography)
+
+dictGender = {"Male" : 0, "Female" : 1}
+df["Gender"] = df["Gender"].map(dictGender)
+
+print(f"Geopraphy: {set(df['Geography'])}")
+print(f"Gender: {set(df['Gender'])}")
+```
+
+![Categoricas2](images/categoricas2.png)
+
+Observação: uma boa prática em análise exploratória e aprendizado de máquina, transformar as codificar as variáveis categóricas. O modelo performar melhor trabalhando com valores numéricos inteiros do que textos.
+
+- Apresentação da Matriz de Correlação
+
+```py
+# @title Montagem de Matriz de Correlação
+correlacao = df.corr()
+plt.figure(figsize=(20,8))
+ax = sns.heatmap(correlacao,annot=True)
+plt.title("Matriz de Correlação")
+plt.show()
+```
+
+![Matriz de Correlação](images/correlacao.png)
+
+Observação: a matriz de correlação apresenta uma maneira fácil para visualizar a relação entre variáveis. Os coeficientes de correlação, calculados através de outro método para DataFrame, o corr, são dispostos numa matriz. Através de uma breve análise, por exemplo, podemos concluir que a variável que possui a maior correlação (mesmo que não muito alta, 0.29) com o nosso target é a Age.
+
+Lembrando que as análises exploratória de dados foram apresentadas de forma resumida. Fica como sugestão a visualização de outros textos, indicados nas referências logo no final do artigo, para aprofundamento do assunto.
