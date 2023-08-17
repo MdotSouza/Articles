@@ -5,14 +5,20 @@ As funções são módulos de código "independentes" que realizam uma tarefa es
 https://users.cs.utah.edu/~germain/PPS/Topics/functions.html
 
 Funções de Primeira Ordem
-Em JavaScript, assim como em outras linguagens de programação, existe o conceito de Função de Primeira Ordem ou _First-class Function_, que é uma das marcas da versatilidade dessa linguagem, quando as funções em JavaScript são tratadas como qualquer outra variável. Conforme demonstrado no exemplo abaixo:
+Em JavaScript, assim como em outras linguagens de programação, existe o conceito de Função de Primeira Ordem ou _First-class Function_, que é uma das marcas da versatilidade dessa linguagem, quando as funções em JavaScript são tratadas como qualquer outra variável.
+
+Vams
 
 ```js
 
-
-
-
-
 ```
+
+Saída:
+- Resultado: 3
+- Resultado: 2
+- Resultado: 12
+- Resultado: 2
+
+
 
 https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function
